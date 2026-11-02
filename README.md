@@ -44,3 +44,31 @@ Below are key custom DAX measures engineered for hospital operational analysis:
 * **Total ER Admissions:**
   ```dax
   Total ER Admissions = COUNTROWS('Fact_ER_Visits')
+
+  Avg Wait Time (Mins) = 
+AVERAGEX(
+    'Fact_ER_Visits',
+    DATEDIFF('Fact_ER_Visits'[Arrival_Timestamp], 'Fact_ER_Visits'[Physician_Seen_Timestamp], MINUTE)
+)
+
+Avg Length of Stay (Hrs) = 
+DIVIDE(
+    AVERAGEX(
+        'Fact_ER_Visits',
+        DATEDIFF('Fact_ER_Visits'[Arrival_Timestamp], 'Fact_ER_Visits'[Discharge_Timestamp], MINUTE)
+    ),
+    60,
+    0
+)
+
+LWBS Rate % = 
+DIVIDE(
+    CALCULATE([Total ER Admissions], 'Fact_ER_Visits'[Disposition] = "LWBS"),
+    [Total ER Admissions],
+    0
+)
+
+👩‍💻 Author
+Trisha Ghosh
+
+LinkedIn: https://www.linkedin.com/in/trisha-ghosh-0027a3399?utm_source=share_via&utm_content=profile&utm_medium=member_android
